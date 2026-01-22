@@ -21,7 +21,7 @@ pid,note_cooperation
 706730,"{'pid': 706730, 'org_coop': DGC One AB}"
 1230122,"{'pid': 1230122, 'org_coop': KRY}"
 1252231,"{'pid': 1252231, 'org_coop': H&E Solutions}"
-``
+```
 Output file: institution_inventory_raw.json
 ```
 ```
