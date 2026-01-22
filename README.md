@@ -8,7 +8,12 @@ COPY (
 WITH (HEADER, DELIMITER ',');
 ```
 
-Running coop_inventory.py   
+Running coop_inventory.py 
+```
+(venv) aw@katharsis-llm:~$ cd /home/aw
+python -m cooperation.coop_inventory
+```
+
 
 Input file: note_cooperation.csv  
 ```
