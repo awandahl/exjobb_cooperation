@@ -10,6 +10,7 @@ from .regex_utils import extract_coop_entities_regex
 # Path to the CSV exported from DuckDB
 CSV_PATH = "/home/aw/cooperation/note_cooperation.csv"
 
+
 def load_notes():
     """
     Load cooperation notes from CSV and return a DataFrame with a clean
@@ -26,6 +27,7 @@ def load_notes():
     df["note_cooperation"] = df["note_cooperation"].astype(str).str.strip()
     return df
 
+
 def normalize_batch_with_llm(candidates):
     """
     Send a small batch of organization name strings to the LLM.
@@ -38,46 +40,45 @@ def normalize_batch_with_llm(candidates):
     if not candidates:
         return []
 
-instruction = dedent(
-    """
-    You receive a list of organization name strings extracted from cooperation notes.
-    For EACH input string, do NOT merge or group them. Treat each line independently.
+    instruction = dedent(
+        """
+        You receive a list of organization name strings extracted from cooperation notes.
+        For EACH input string, do NOT merge or group them. Treat each line independently.
 
-    For each string:
-      - "raw": the original string
-      - "normalized": a concise, canonical organization name for that string only
-      - "type": one of
-          "company", "university", "research_institute",
-          "public_authority", "ngo", "other"
-      - "country": country name if obvious (e.g. "Sweden"), else ""
+        For each string:
+          - "raw": the original string
+          - "normalized": a concise, canonical organization name for that string only
+          - "type": one of
+              "company", "university", "research_institute",
+              "public_authority", "ngo", "other"
+          - "country": country name if obvious (e.g. "Sweden"), else ""
 
-    Heuristics:
-      - If the name ends with "AB", "Ltd", "Inc", "Corp", or "AG",
-        classify type="company" unless there is a very strong reason not to.
-      - If the name contains "University", "Institute of Technology", or "College",
-        classify type="university" unless it is clearly a department inside a company.
-      - If the name contains "Authority", "Agency", "Ministry", or "Office"
-        and looks governmental, classify type="public_authority".
-      - If the name looks like a person's name (for example "First Last"),
-        set normalized="" and type="other".
-      - If the name clearly refers to a Swedish organization (has "AB"
-        and/or the word "Sweden" or is a well-known Swedish company),
-        set country="Sweden".
+        Heuristics:
+          - If the name ends with "AB", "Ltd", "Inc", "Corp", or "AG",
+            classify type="company" unless there is a very strong reason not to.
+          - If the name contains "University", "Institute of Technology", or "College",
+            classify type="university" unless it is clearly a department inside a company.
+          - If the name contains "Authority", "Agency", "Ministry", or "Office"
+            and looks governmental, classify type="public_authority".
+          - If the name looks like a person's name (for example "First Last"),
+            set normalized="" and type="other".
+          - If the name clearly refers to a Swedish organization (has "AB"
+            and/or the word "Sweden" or is a well-known Swedish company),
+            set country="Sweden".
 
-    Important:
-      - Do NOT group or cluster multiple inputs into one organization.
-      - Output one JSON object per input string, in the SAME ORDER.
-      - If input is too vague to be an organization, set normalized="" and type="other".
+        Important:
+          - Do NOT group or cluster multiple inputs into one organization.
+          - Output one JSON object per input string, in the SAME ORDER.
+          - If input is too vague to be an organization, set normalized="" and type="other".
 
-    Respond ONLY with a JSON array of objects, e.g.:
+        Respond ONLY with a JSON array of objects, e.g.:
 
-    [
-      {"raw": "...", "normalized": "...", "type": "company", "country": "Sweden"},
-      ...
-    ]
-    """
+        [
+          {"raw": "...", "normalized": "...", "type": "company", "country": "Sweden"},
+          ...
+        ]
+        """
     )
-
 
     text_block = "\n".join(f"- {c}" for c in candidates)
     prompt = instruction + "\n\nInput strings:\n" + text_block + "\n\nJSON:"
@@ -134,6 +135,7 @@ instruction = dedent(
         )
     return out
 
+
 def build_institution_inventory(df, max_rows=50, batch_size=5):
     """
     df: DataFrame with at least column 'note_cooperation'.
@@ -162,9 +164,11 @@ def build_institution_inventory(df, max_rows=50, batch_size=5):
     results = []
     for i in range(0, len(all_candidates), batch_size):
         batch = all_candidates[i : i + batch_size]
-        print(f"Normalizing batch {i}–{i + len(batch) - 1} "
-              f"({i//batch_size + 1}/{(len(all_candidates)-1)//batch_size + 1}) ...",
-              flush=True)
+        print(
+            f"Normalizing batch {i}–{i + len(batch) - 1} "
+            f"({i//batch_size + 1}/{(len(all_candidates)-1)//batch_size + 1}) ...",
+            flush=True,
+        )
         batch_res = normalize_batch_with_llm(batch)
         print(f"  -> got {len(batch_res)} items", flush=True)
         results.extend(batch_res)
