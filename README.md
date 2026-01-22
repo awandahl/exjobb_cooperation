@@ -29,6 +29,48 @@ pid,note_cooperation
 1252231,"{'pid': 1252231, 'org_coop': H&E Solutions}"
 ```
 Output file: institution_inventory_raw.json
-```
+``` {
+    "raw": "Abb Lv Motors",
+    "normalized": "ABB LV Motors",
+    "type": "company",
+    "country": ""
+  },
+  {
+    "raw": "Beyond Atlas",
+    "normalized": "Beyond Atlas",
+    "type": "other",
+    "country": ""
+  },
+  {
+    "raw": "Dgc One Ab",
+    "normalized": "DGC One AB",
+    "type": "company",
+    "country": ""
+  },
+  {
+    "raw": "Ericsson Ab",
+    "normalized": "Ericsson AB",
+    "type": "company",
+    "country": "Sweden"
+  },
+  {
+    "raw": "H&E Solutions",
+    "normalized": "H&E Solutions",
+    "type": "other",
+    "country": ""
+  },
+  {
+    "raw": "Hbo Europe",
+    "normalized": "HBO Europe",
+    "type": "company",
+    "country": ""
+  },
+  {
+    "raw": "Iggesund Paperboard",
+    "normalized": "Iggesund Paperboard",
+    "type": "company",
+    "country": "Sweden"
+  }
+
 ```
 
