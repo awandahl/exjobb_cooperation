@@ -10,8 +10,9 @@ WITH (HEADER, DELIMITER ',');
 
 Running coop_inventory.py 
 ```
-(venv) aw@katharsis-llm:~$ cd /home/aw
-python -m cooperation.coop_inventory
+cd /home/aw
+nohup python -m cooperation.coop_inventory > coop_inventory.log 2>&1 &
+
 ```
 
 
