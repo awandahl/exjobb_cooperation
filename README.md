@@ -9,6 +9,7 @@ WITH (HEADER, DELIMITER ',');
 ```
 
 Running coop_inventory.py   
+
 Input file: note_cooperation.csv  
 ```
 pid,note_cooperation
