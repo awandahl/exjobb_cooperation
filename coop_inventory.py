@@ -54,8 +54,19 @@ def normalize_batch_with_llm(candidates):
           - "country": country name if obvious (e.g. "Sweden"), else ""
 
         Heuristics:
-          - If the name ends with "AB", "Ltd", "Inc", "Corp", or "AG",
-            classify type="company" unless there is a very strong reason not to.
+          - If the name ends with a common legal company suffix (case-insensitive, ignoring trailing dots), classify type="company"
+          unless there is a very strong reason not to. Treat these as strong company signals:
+          "AB", "Oy", "Oyj", "A/S",
+          "GmbH", "GmbH & Co. KG", "AG",
+          "Ltd", "Limited",
+          "Inc", "Incorporated",
+          "Corp", "Corporation",
+          "LLC", "PLC",
+          "NV", "N.V.", "BV", "B.V.",
+          "S.A.", "SA", "SAS",
+          "Srl", "SRL", "SpA", "S.p.A.",
+          "Sp. z o.o.", "s.r.o.", "s.r.l.",
+          "Ltda", "Ltée", "Pty Ltd", "Pte Ltd".
           - If the name contains "University", "Institute of Technology", or "College",
             classify type="university" unless it is clearly a department inside a company.
           - If the name contains "Authority", "Agency", "Ministry", or "Office"
